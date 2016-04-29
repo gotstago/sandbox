@@ -9,7 +9,7 @@ import (
 	"github.com/qor/admin"
 	"github.com/qor/qor"
     //"github.com/gotstago/lighthouse/admin/db"
-    "github.com/gotstago/lighthouse/admin/config"
+    "github.com/gotstago/sandbox/admin/config"
 )
 
 // Create a GORM-backend model
