@@ -4,64 +4,61 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/gotstago/sandbox/admin/model"
+    "github.com/gotstago/sandbox/admin/app/models"
+    "github.com/gotstago/sandbox/admin/config/routes"
 	"github.com/jinzhu/gorm"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/qor/admin"
 	"github.com/qor/qor"
-    //"github.com/gotstago/lighthouse/admin/db"
-    "github.com/gotstago/sandbox/admin/config"
+	// "github.com/qor/render"
 )
 
-// Create a GORM-backend model
-type User struct {
-	gorm.Model
-	Name string
-}
-
-// Create another GORM-backend model
-type Product struct {
-	gorm.Model
-	Name        string
-	Description string
-}
 var DB *gorm.DB
 
 func main() {
 	DB, _ := gorm.Open("sqlite3", "demo.db")
-	DB.AutoMigrate(&User{}, &Product{}, &config.Entity{})
+	DB.AutoMigrate(&models.User{}, &models.Product{}, &model.Entity{})
 
-	// Initalize
-	Admin := admin.New(&qor.Config{DB: DB})
+	// Register route
+	mux := http.NewServeMux()
     
-    Admin.SetSiteName("Lighthouse Buy and Sell")
+    mux.Handle("/", routes.Router())
+	
+    // Initalize
+	Admin := admin.New(&qor.Config{DB: DB})
+
+	Admin.SetSiteName("Lighthouse Buy and Sell")
 
 	// Create resources from GORM-backend model
-	Admin.AddResource(&User{})
-	Admin.AddResource(&Product{}, &admin.Config{Menu: []string{"Product Management"}})
+	Admin.AddResource(&models.User{})
+	Admin.AddResource(&models.Product{}, &admin.Config{Menu: []string{"Product Management"}})
 
 	// Add Dashboard
 	Admin.AddMenu(&admin.Menu{Name: "Dashboard", Link: "/admin"})
 
-	// Register route
-	mux := http.NewServeMux()
 	// a mount to /admin, so visit `/admin` to view the admin interface
 	Admin.MountTo("/admin", mux)
-    
-    
-    //initialize design
-    Design := admin.New(&qor.Config{DB: DB})
-    
-    Design.SetSiteName("Lighthouse Buy and Sell - Design")
+
+	//initialize design
+	Design := admin.New(&qor.Config{DB: DB})
+
+	Design.SetSiteName("Lighthouse Buy and Sell - Design")
 
 	// Create resources from GORM-backend model
 	//Design.AddResource(&Entity{})
-	Design.AddResource(&config.Entity{}, &admin.Config{Menu: []string{"Entity Management"}})
+	Design.AddResource(&model.Entity{}, &admin.Config{Menu: []string{"Entity Management"}})
 
 	// Add Dashboard
 	Design.AddMenu(&admin.Menu{Name: "Dashboard", Link: "/design"})
 
-    Design.MountTo("/design", mux)
+	Design.MountTo("/design", mux)
+    
+    //config.View.Layout
 
 	fmt.Println("Listening on: 9001")
-	http.ListenAndServe(":9001", mux)
+	//http.ListenAndServe(":9001", mux)
+	if err := http.ListenAndServe(":9001", mux); err != nil {
+		panic(err)
+	}
 }
