@@ -18,6 +18,7 @@ var DB *gorm.DB
 
 func main() {
 	DB, _ := gorm.Open("sqlite3", "demo.db")
+    //l10n.RegisterCallbacks(&DB)
 	DB.AutoMigrate(&models.User{}, &models.Product{}, &model.Entity{})
 
 	// Register route

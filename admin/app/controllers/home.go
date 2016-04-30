@@ -24,7 +24,7 @@ func HomeIndex(ctx *gin.Context) {
 	config.View.Execute(
         //config.View.Funcs(i18nFuncMap).Execute(
 		"home_index",
-		gin.H{
+		gin.H{//who knows what H stands for :) - not clear to me...
 			//"SeoTag":           seoObj.HomePage.Render(seoObj, nil),
             "top_banner": "<h1>hello</h1>",
 			// "top_banner":       admin.Widgets.Render("Banner", "TopBanner", widgetContext, true),
