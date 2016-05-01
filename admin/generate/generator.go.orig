@@ -1,7 +1,7 @@
 package main
 
 import (
-	// "errors"
+	"errors"
 	"io"
 	"text/template"
 )
@@ -14,9 +14,9 @@ const (
 
 type Metadata struct {
 	PackageName   string
-	TypeData        map[string]string
-	// MarshalObject string
-	TypeName          string
+	Object        string
+	MarshalObject string
+	Type          string
 }
 
 type Generator struct {
@@ -33,11 +33,11 @@ func (g *Generator) Generate(writer io.Writer, metadata Metadata) error {
 }
 
 func (g *Generator) template() (*template.Template, error) {
-	// if g.Format != JSON {
-	// 	return nil, errors.New("Unsupported format")
-	// }
+	if g.Format != JSON {
+		return nil, errors.New("Unsupported format")
+	}
 
-	resource, err := Asset("templates/model.tmpl")
+	resource, err := Asset("templates/writeto_json.tmpl")
 	if err != nil {
 		return nil, err
 	}
