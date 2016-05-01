@@ -4,6 +4,8 @@ import (
 	"errors"
 	"io"
 	"text/template"
+    "go/format"
+    "bytes"
 )
 
 type Format uint
@@ -28,8 +30,14 @@ func (g *Generator) Generate(writer io.Writer, metadata Metadata) error {
 	if err != nil {
 		return nil
 	}
-
-	return tmpl.Execute(writer, metadata)
+    //r, w := io.Pipe()
+    buf := bytes.Buffer
+    //buf.WriteTo(w)
+    //buf.ReadFrom(r)
+    //format.Source
+	//return tmpl.Execute(writer, metadata)
+    tmpl.Execute(buf, metadata)
+    buf.WriteTo(writer)
 }
 
 func (g *Generator) template() (*template.Template, error) {
