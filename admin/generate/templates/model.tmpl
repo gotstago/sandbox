@@ -5,9 +5,9 @@ import "github.com/jinzhu/gorm"
 
 
 type {{.TypeName}} struct {
-    gorm.Model
+gorm.Model
   {{range $key, $value := .TypeData}}
-    {{$key}} {{$value}} 
+{{$key}} {{$value}} 
   {{end}}
 }
 

@@ -6,6 +6,7 @@ import (
 	"text/template"
     "go/format"
     "bytes"
+    //"fmt"
 )
 
 type Format uint
@@ -31,13 +32,17 @@ func (g *Generator) Generate(writer io.Writer, metadata Metadata) error {
 		return nil
 	}
     //r, w := io.Pipe()
-    buf := bytes.Buffer
+    var buf bytes.Buffer
     //buf.WriteTo(w)
     //buf.ReadFrom(r)
     //format.Source
 	//return tmpl.Execute(writer, metadata)
-    tmpl.Execute(buf, metadata)
-    buf.WriteTo(writer)
+    tmpl.Execute(&buf, metadata)
+    temp,_ := format.Source(buf.Bytes())
+    //fmt.Println("buf is ",temp)
+    //bytes.NewBuffer(temp)
+    _, result := bytes.NewBuffer(temp).WriteTo(writer)
+    return result
 }
 
 func (g *Generator) template() (*template.Template, error) {

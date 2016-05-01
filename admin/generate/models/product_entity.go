@@ -5,6 +5,8 @@ import "github.com/jinzhu/gorm"
 
 type Product struct {
 	gorm.Model
+
 	Description string
-	Name        string
+
+	Name string
 }
