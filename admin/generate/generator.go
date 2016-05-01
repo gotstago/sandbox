@@ -31,17 +31,13 @@ func (g *Generator) Generate(writer io.Writer, metadata Metadata) error {
 	if err != nil {
 		return nil
 	}
-    //r, w := io.Pipe()
+    //create in memory buffer to hold result of template execution
     var buf bytes.Buffer
-    //buf.WriteTo(w)
-    //buf.ReadFrom(r)
-    //format.Source
-	//return tmpl.Execute(writer, metadata)
     tmpl.Execute(&buf, metadata)
-    temp,_ := format.Source(buf.Bytes())
-    //fmt.Println("buf is ",temp)
-    //bytes.NewBuffer(temp)
-    _, result := bytes.NewBuffer(temp).WriteTo(writer)
+    //format contents of buffer before sending to writer
+    formattedBuf,_ := format.Source(buf.Bytes())
+    //send along to file writer passed in as parameter
+    _, result := bytes.NewBuffer(formattedBuf).WriteTo(writer)
     return result
 }
 
