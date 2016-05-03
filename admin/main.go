@@ -20,7 +20,7 @@ var DataTypes = []string{"uint", "int", "string"}
 func main() {
 	DB, _ := gorm.Open("sqlite3", "demo.db")
     //l10n.RegisterCallbacks(&DB)
-	DB.AutoMigrate(&models.User{}, &models.Product{}, &model.Entity{}, &model.EntityAttribute{})
+	DB.AutoMigrate(&models.User{}, &models.Product{}, &model.Entity{}, &model.EntityAttribute{}, &model.AttributeType{})
 
 	// Register route
 	mux := http.NewServeMux()
@@ -49,9 +49,11 @@ func main() {
 
 	// Create resources from GORM-backend model
 	//Design.AddResource(&Entity{})
-	entity := Design.AddResource(&model.Entity{}, &admin.Config{Menu: []string{"Entity Management"}})
-    entityAttributeMeta := entity.Meta(&admin.Meta{Name: "EntityAttributes"})
-	entityAttributeMeta.Resource.Meta(&admin.Meta{Name: "DataType", Type: "select_one", Collection: DataTypes})
+	//entity := 
+    Design.AddResource(&model.Entity{}, &admin.Config{Menu: []string{"Entity Management"}})
+    Design.AddResource(&model.AttributeType{}, &admin.Config{Menu: []string{"Lookups"}})
+    //entityAttributeMeta := entity.Meta(&admin.Meta{Name: "EntityAttributes"})
+	//entityAttributeMeta.Resource.Meta(&admin.Meta{Name: "DataType", Type: "select_one", Collection: DataTypes})
     //entity.Meta(&admin.Meta{Name: "DataType", Type: "select_one", Collection: DataTypes})
     //Design.Meta(&admin.Meta{Name: "DataType", Type: "select_one", Collection: DataTypes})
 

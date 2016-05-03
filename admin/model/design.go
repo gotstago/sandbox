@@ -4,10 +4,10 @@ import "github.com/jinzhu/gorm"
 
 type Entity struct {
 	gorm.Model
-	DisplayName     string
-	Description     string
-	TableName       string
-	NonReportable   bool
+	DisplayName   string
+	Description   string
+	TableName     string
+	NonReportable bool
 	//ReportingFolder bool
 
 	// UserID            uint
@@ -31,7 +31,8 @@ type EntityAttribute struct {
 	EntityID           uint
 	Name               string
 	DisplayName        string
-	DataType           string
+	AttributeTypeID    uint
+	AttributeType      AttributeType
 	ObjectDisplayValue bool
 	Deprecated         bool
 	Private            bool
@@ -41,6 +42,18 @@ type EntityAttribute struct {
 	// Price           float32
 	// DiscountRate    uint
 	// transition.Transition
+}
+
+type DataType struct {
+	gorm.Model
+	//Code        string
+	DisplayName string
+}
+
+type AttributeType struct {
+	gorm.Model
+	Code        string
+	DisplayName string
 }
 
 // func (entity Entity) Amount() (amount float32) {
