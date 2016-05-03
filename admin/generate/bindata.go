@@ -30,7 +30,7 @@ type asset struct {
 
 // templatesModelTmpl reads file data from disk. It returns an error on failure.
 func templatesModelTmpl() (*asset, error) {
-	path := "/home/dev/godev/src/github.com/gotstago/sandbox/admin/generate/templates/model.tmpl"
+	path := "/home/dev/go-programs/src/github.com/gotstago/sandbox/admin/generate/templates/model.tmpl"
 	name := "templates/model.tmpl"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -48,7 +48,7 @@ func templatesModelTmpl() (*asset, error) {
 
 // templatesWriteto_jsonTmpl reads file data from disk. It returns an error on failure.
 func templatesWriteto_jsonTmpl() (*asset, error) {
-	path := "/home/dev/godev/src/github.com/gotstago/sandbox/admin/generate/templates/writeto_json.tmpl"
+	path := "/home/dev/go-programs/src/github.com/gotstago/sandbox/admin/generate/templates/writeto_json.tmpl"
 	name := "templates/writeto_json.tmpl"
 	bytes, err := bindataRead(path, name)
 	if err != nil {

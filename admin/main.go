@@ -15,11 +15,12 @@ import (
 )
 
 var DB *gorm.DB
+var DataTypes = []string{"uint", "int", "string"}
 
 func main() {
 	DB, _ := gorm.Open("sqlite3", "demo.db")
     //l10n.RegisterCallbacks(&DB)
-	DB.AutoMigrate(&models.User{}, &models.Product{}, &model.Entity{})
+	DB.AutoMigrate(&models.User{}, &models.Product{}, &model.Entity{}, &model.EntityAttribute{})
 
 	// Register route
 	mux := http.NewServeMux()
@@ -48,7 +49,11 @@ func main() {
 
 	// Create resources from GORM-backend model
 	//Design.AddResource(&Entity{})
-	Design.AddResource(&model.Entity{}, &admin.Config{Menu: []string{"Entity Management"}})
+	entity := Design.AddResource(&model.Entity{}, &admin.Config{Menu: []string{"Entity Management"}})
+    entityAttributeMeta := entity.Meta(&admin.Meta{Name: "EntityAttributes"})
+	entityAttributeMeta.Resource.Meta(&admin.Meta{Name: "DataType", Type: "select_one", Collection: DataTypes})
+    //entity.Meta(&admin.Meta{Name: "DataType", Type: "select_one", Collection: DataTypes})
+    //Design.Meta(&admin.Meta{Name: "DataType", Type: "select_one", Collection: DataTypes})
 
 	// Add Dashboard
 	Design.AddMenu(&admin.Menu{Name: "Dashboard", Link: "/design"})

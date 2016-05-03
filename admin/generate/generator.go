@@ -2,11 +2,11 @@ package main
 
 import (
 	// "errors"
+	"bytes"
+	"go/format"
 	"io"
 	"text/template"
-    "go/format"
-    "bytes"
-    //"fmt"
+	//"fmt"
 )
 
 type Format uint
@@ -16,10 +16,10 @@ const (
 )
 
 type Metadata struct {
-	PackageName   string
-	TypeData        map[string]string
+	PackageName string
+	TypeData    map[string]string
 	// MarshalObject string
-	TypeName          string
+	TypeName string
 }
 
 type Generator struct {
@@ -29,16 +29,22 @@ type Generator struct {
 func (g *Generator) Generate(writer io.Writer, metadata Metadata) error {
 	tmpl, err := g.template()
 	if err != nil {
-		return nil
+		return err
 	}
-    //create in memory buffer to hold result of template execution
-    var buf bytes.Buffer
-    tmpl.Execute(&buf, metadata)
-    //format contents of buffer before sending to writer
-    formattedBuf,_ := format.Source(buf.Bytes())
+	//create in memory buffer to hold result of template execution
+	var buf bytes.Buffer
+	err = tmpl.Execute(&buf, metadata)
+	if err != nil {
+		return err
+	}
+	//format contents of buffer before sending to writer
+	formattedBuf, err2 := format.Source(buf.Bytes())
+	if err2 != nil {
+		return err2
+	}
     //send along to file writer passed in as parameter
-    _, result := bytes.NewBuffer(formattedBuf).WriteTo(writer)
-    return result
+	_, err3 := bytes.NewBuffer(formattedBuf).WriteTo(writer)
+	return err3
 }
 
 func (g *Generator) template() (*template.Template, error) {
