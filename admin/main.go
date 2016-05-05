@@ -53,7 +53,40 @@ func main() {
 	entity := Design.AddResource(&model.Entity{}, &admin.Config{Menu: []string{"Entity Management"}})
 	// Register Activity for Entity resource
 	activity.Register(entity)
+    
+    entity.Action(&admin.Action{
+		Name: "Disable",
+		Handle: func(arg *admin.ActionArgument) error {
+			for _, record := range arg.FindSelectedRecords() {
+				arg.Context.DB.Model(record.(*model.Entity)).Update("enabled", false)
+			}
+			return nil
+		},
+		Visible: func(record interface{}, context *admin.Context) bool {
+			if entity, ok := record.(*model.Entity); ok {
+				return entity.Enabled == true
+			}
+			return true
+		},
+		Modes: []string{"index", "edit", "menu_item"},
+	})
 
+    entity.Action(&admin.Action{
+		Name: "Enable",
+		Handle: func(arg *admin.ActionArgument) error {
+			for _, record := range arg.FindSelectedRecords() {
+				arg.Context.DB.Model(record.(*model.Entity)).Update("enabled", true)
+			}
+			return nil
+		},
+		Visible: func(record interface{}, context *admin.Context) bool {
+			if entity, ok := record.(*model.Entity); ok {
+				return entity.Enabled == false
+			}
+			return true
+		},
+		Modes: []string{"index", "edit", "menu_item"},
+	})
 	Design.AddResource(&model.AttributeType{}, &admin.Config{Menu: []string{"Lookups"}})
 	//entityAttributeMeta := entity.Meta(&admin.Meta{Name: "EntityAttributes"})
 	//entityAttributeMeta.Resource.Meta(&admin.Meta{Name: "DataType", Type: "select_one", Collection: DataTypes})

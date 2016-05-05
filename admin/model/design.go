@@ -24,6 +24,7 @@ type Entity struct {
 	// BillingAddress    Address
 	EntityAttributes []EntityAttribute
 	// transition.Transition
+    Enabled         bool
 }
 
 type EntityAttribute struct {
