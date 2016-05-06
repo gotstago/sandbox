@@ -9,11 +9,11 @@ import (
 	"github.com/gotstago/sandbox/admin/app/models"
 	"github.com/gotstago/sandbox/admin/config/routes"
 	"github.com/gotstago/sandbox/admin/model"
+	"github.com/gotstago/worker"
 	"github.com/jinzhu/gorm"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/qor/admin"
 	"github.com/qor/qor"
-	"github.com/qor/worker"
 	// "github.com/qor/render"
 )
 
@@ -100,20 +100,21 @@ func main() {
 	// Add Dashboard
 	Design.AddMenu(&admin.Menu{Name: "Dashboard", Link: "/design"})
 
-	Design.MountTo("/design", mux)
+	// Design.MountTo("/design", mux)
 
 	// Add Worker
-	Worker := worker.New(worker.Config{Admin:Design})
+	Worker := worker.New()
+	//Worker := worker.New(worker.Config{Admin:Design})
 	//getWorker()
-
+	fmt.Println("just created worker...")
 	type sendNewsletterArgument struct {
 		Subject      string
 		Content      string `sql:"size:65532"`
 		SendPassword string
 		worker.Schedule
 	}
-    
-    Worker.RegisterJob(&worker.Job{
+
+	Worker.RegisterJob(&worker.Job{
 		Name: "Send Newsletter",
 		Handler: func(argument interface{}, qorJob worker.QorJobInterface) error {
 			qorJob.AddLog("Started sending newsletters...")
@@ -128,8 +129,10 @@ func main() {
 		},
 		Resource: Design.NewResource(&sendNewsletterArgument{}),
 	})
-
+	fmt.Println("just registered job...")
 	Design.AddResource(Worker)
+    //put all resource additions before this to initialize resources correctly.
+	Design.MountTo("/design", mux)
 
 	//config.View.Layout
 
