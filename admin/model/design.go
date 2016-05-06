@@ -24,7 +24,8 @@ type Entity struct {
 	// BillingAddress    Address
 	EntityAttributes []EntityAttribute
 	// transition.Transition
-    Enabled         bool
+	Resource bool
+	Enabled  bool
 }
 
 type EntityAttribute struct {
@@ -37,6 +38,7 @@ type EntityAttribute struct {
 	ObjectDisplayValue bool
 	Deprecated         bool
 	Private            bool
+
 	// SizeVariationID uint
 	// SizeVariation   SizeVariation
 	// Quantity        uint
