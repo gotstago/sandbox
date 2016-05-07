@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gotstago/activity"
@@ -106,8 +107,9 @@ func main() {
 	Worker := worker.New()
 	//Worker := worker.New(worker.Config{Admin:Design})
 	//getWorker()
-	fmt.Println("just created worker...")
+	// fmt.Println("just created worker...")
 	type sendNewsletterArgument struct {
+		ProjectName  string
 		Subject      string
 		Content      string `sql:"size:65532"`
 		SendPassword string
@@ -117,9 +119,22 @@ func main() {
 	Worker.RegisterJob(&worker.Job{
 		Name: "Send Newsletter",
 		Handler: func(argument interface{}, qorJob worker.QorJobInterface) error {
+            var dirRoot string
+			if arg, ok := argument.(*sendNewsletterArgument); ok {
+				return fmt.Errorf("error sending newsletter...")
+				qorJob.AddLog(fmt.Sprintf("Argument: %+v", arg))
+				dirRoot = os.Getenv("GOPATH") + "/src/github.com/gotstago/" + arg.ProjectName
+			}
 			qorJob.AddLog("Started sending newsletters...")
-			qorJob.AddLog(fmt.Sprintf("Argument: %+v", argument.(*sendNewsletterArgument)))
-			for i := 1; i <= 100; i++ {
+
+			err := os.MkdirAll(dirRoot, 0755)
+			if err != nil {
+				err = fmt.Errorf("Error creating directory: %v", err)
+			}
+
+			qorJob.AddLog("Finished send newsletters")
+			qorJob.AddLog(fmt.Sprintln("dirRoot is ...", dirRoot))
+			for i := 1; i <= 10; i++ {
 				time.Sleep(100 * time.Millisecond)
 				qorJob.AddLog(fmt.Sprintf("Sending newsletter %v...", i))
 				qorJob.SetProgress(uint(i))
@@ -129,9 +144,9 @@ func main() {
 		},
 		Resource: Design.NewResource(&sendNewsletterArgument{}),
 	})
-	fmt.Println("just registered job...")
+	// fmt.Println("just registered job...")
 	Design.AddResource(Worker)
-    //put all resource additions before this to initialize resources correctly.
+	//put all resource additions before this to initialize resources correctly.
 	Design.MountTo("/design", mux)
 
 	//config.View.Layout

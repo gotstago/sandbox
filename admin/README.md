@@ -12,3 +12,8 @@ Scope - Scope is used to define filters that appear at the title bar in list vie
 			},
 		})
 	}
+    
+    File directory creation and great resource for permissions to files and directories
+    http://stackoverflow.com/questions/14249467/os-mkdir-and-os-mkdirall-permission-value
+    
+    
