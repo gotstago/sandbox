@@ -9,6 +9,8 @@ import (
 )
 
 func TestGenerateFromTemplate(t *testing.T) {
+    //create entities
+    //get list of entities that are tagged as resources
 	packageName := "models"
 	goPath, err := GetGopath()
 	if err != nil {
