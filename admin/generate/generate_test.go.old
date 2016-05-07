@@ -1,0 +1,37 @@
+package generate
+
+import(
+    "testing"
+)
+
+func TestGenerateFromTemplate(t *testing.T){
+    packageName := "models"
+
+	pkgDir, err := packageDir(packageName)
+	if err != nil {
+		panic(err)
+	}
+
+	typeName := "Product"
+
+	typeData := map[string]string{
+		"Name":        "string",
+		"Description": "string",
+	}
+
+	outputFile := formatFileName(typeName)
+	writer, err := os.Create(filepath.Join(pkgDir, outputFile))
+	if err != nil {
+		panic(err)
+	}
+	defer writer.Close()
+
+	generator := &Generator{Format: JSON}
+
+	m := metadata(typeName, typeData, packageName)
+	if err := generator.Generate(writer, m); err != nil {
+		panic(err)
+	}
+
+	fmt.Printf("Generated %s\n", outputFile)
+}

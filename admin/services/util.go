@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"os"
+	"strings"
 )
 
 //GetGopath returns an error if there is no GOPATH variable set
@@ -37,4 +38,8 @@ func CreateProjectFolders(folders ...string) (error){
 
 func RemoveProject(projectFolder string) error{
     return os.RemoveAll(projectFolder)
+}
+
+func FormatFileName(typeName string, targetType string) string {
+	return fmt.Sprintf("%s_%s.go", strings.ToLower(typeName), strings.ToLower(targetType))
 }
