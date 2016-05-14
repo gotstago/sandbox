@@ -25,7 +25,21 @@ var Design *admin.Admin
 func main() {
 	DB, _ := gorm.Open("sqlite3", "demo.db")
 	//l10n.RegisterCallbacks(&DB)
-	DB.AutoMigrate(&models.User{}, &models.Product{}, &model.Entity{}, &model.EntityAttribute{}, &model.AttributeType{})
+	DB.AutoMigrate(
+        &models.User{}, 
+        &models.Product{}, 
+        &model.Entity{}, 
+        &model.EntityAttribute{}, 
+        &model.AttributeType{}, 
+        &model.Consultant{}, 
+        &model.Address{}, 
+        &model.Phone{}, 
+        &model.PhoneType{},
+        &model.Skill{}, 
+        &model.Industry{}, 
+        &model.JobCategory{}, 
+        &model.Service{},         
+        )
 	//AutoMigrate(&activity.QorActivity{})
 	// Register route
 	mux := http.NewServeMux()

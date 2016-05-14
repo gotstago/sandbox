@@ -1,6 +1,10 @@
 package model
 
-import "github.com/jinzhu/gorm"
+import (
+	"fmt"
+
+	"github.com/jinzhu/gorm"
+)
 
 type Entity struct {
 	gorm.Model
@@ -54,6 +58,84 @@ type DataType struct {
 }
 
 type AttributeType struct {
+	gorm.Model
+	Code        string
+	DisplayName string
+}
+
+type Skill struct {
+	gorm.Model
+	Code        string
+	DisplayName string
+	Description string
+}
+type Industry struct {
+	gorm.Model
+	Code        string
+	DisplayName string
+	Description string
+}
+type JobCategory struct {
+	gorm.Model
+	Code        string
+	DisplayName string
+	Description string
+}
+type Service struct {
+	gorm.Model
+	Code        string
+	DisplayName string
+	Description string
+}
+type Consultant struct {
+	gorm.Model
+	FirstName       string
+	LastName        string
+	MiddleName      string
+	Title           string
+	Headline        string
+	EducationDegree string
+	WriteUp         string `sql:"size:2000"`
+	IndustryID      uint
+	Industry        Industry
+	JobCategoryID   uint
+	JobCategory     JobCategory
+	ServiceID       uint
+	Service         Service
+	SkillID         uint
+	Skill           Skill
+	Addresses       []Address
+}
+
+type Address struct {
+	gorm.Model
+	ConsultantID  uint
+	ContactName   string
+	Phone         string
+	City          string
+	Address1      string
+	Address2      string
+	StateProvince string
+	Country       string
+}
+
+func (address Address) Stringify() string {
+	return fmt.Sprintf("%v, %v, %v", address.Address2, address.Address1, address.City)
+}
+
+type Phone struct {
+	gorm.Model
+	ConsultantID uint
+	Phone        string
+	PhoneTypeID  uint
+	PhoneType    PhoneType
+}
+
+// func (phone Phone) Stringify() string {
+// 	return fmt.Sprintf("%v, %v, %v", address.Address2, address.Address1, address.City)
+// }
+
+type PhoneType struct {
 	gorm.Model
 	Code        string
 	DisplayName string
